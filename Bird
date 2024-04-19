@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MargeTheBirdToken is ERC20 {
+    address public owner;
+    bool public minted;
+
+    // Constructor
+    constructor() ERC20("Marge the Bird", "MARGE") {
+        owner = msg.sender;
+        minted = false;
+        // Mint the initial supply to the owner
+        _mint(owner, 1000000000 * 10 ** uint(decimals())); // Total supply: 1 billion tokens with decimals
+    }
+
+    // Function to mint tokens - can only be called once by the owner
+    function mint(address to, uint256 amount) public {
+        require(msg.sender == owner, "Only the owner can mint tokens");
+        require(!minted, "Tokens have already been minted");
+        _mint(to, amount);
+        minted = true;
+    }
+}
